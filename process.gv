@@ -1,0 +1,43 @@
+digraph "esp8266-micropython-desk-temperature" {
+penwidth=2;
+node [penwidth=2, shape=rectangle];
+
+"log";
+
+subgraph cluster_a {
+label = "device";
+"configure network";
+"receive request";
+"measurement";
+"transmit reply";
+}
+
+subgraph cluster_b {
+label = "logging";
+"wait for minute";
+"make request";
+"receive reply";
+"write to log";
+}
+
+subgraph cluster_c {
+label = "graphing";
+"read log";
+"make graph";
+}
+
+edge [penwidth=2, style=normal];
+
+"make request" -> "receive request";
+"transmit reply" -> "receive reply";
+"write to log" -> "log";
+
+"log" -> "read log";
+
+edge [penwidth=2, style=dotted];
+
+"wait for minute" -> "make request" -> "receive reply" -> "write to log" -> "wait for minute";
+"configure network" -> "receive request" -> "measurement" -> "transmit reply" -> "receive request";
+"read log" -> "make graph";
+
+}
